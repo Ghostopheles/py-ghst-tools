@@ -5,6 +5,7 @@ from typing import Optional
 
 from ghst.tools.modifier_trees import cmd_dump_tree
 from ghst.tools.blp import cmd_view_blp, cmd_convert_blp
+from ghst.tools.armadillo import cmd_add_armadillo_key
 
 app = typer.Typer(name="ghst", add_completion=False)
 
@@ -39,6 +40,23 @@ def view_blp(blp_file_path: Path):
 )
 def convert_blp(file_path: Path, format: Optional[str] = "png"):
     cmd_convert_blp(file_path, format)
+
+
+# ARMADILLO COMMANDS
+
+armadillo_app = typer.Typer()
+app.add_typer(
+    armadillo_app,
+    name="armadillo",
+    help="Armadillo related commands",
+)
+
+
+@armadillo_app.command(
+    name="add", help="Writes an armadillo key to the appropriate key directory"
+)
+def add_armadillo_key():
+    cmd_add_armadillo_key()
 
 
 def handle_cli():

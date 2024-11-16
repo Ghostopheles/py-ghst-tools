@@ -1,0 +1,4 @@
+typer
+pillow
+httpx[http2]
+customtkinter

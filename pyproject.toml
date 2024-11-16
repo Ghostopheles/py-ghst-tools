@@ -1,5 +1,5 @@
 [project]
-name = "py_ghst_tools"
+name = "py-ghst-tools"
 version = "0.0.1"
 description = "A collection of cadaverous World of Warcraft datamining tools"
 authors = [

@@ -45,8 +45,10 @@ def view_blp(blp_file_path: Path):
     name="convert",
     help="Convert a file or all files in a directory into the specified format",
 )
-def convert_blp(file_path: Path, format: Optional[str] = "png"):
-    cmd_convert_blp(file_path, format)
+def convert_blp(
+    file_path: Path, format: Optional[str] = "png", output_dir: Optional[Path] = None
+):
+    cmd_convert_blp(file_path, format, output_path=output_dir)
 
 
 # ARMADILLO COMMANDS

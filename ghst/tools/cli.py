@@ -7,7 +7,7 @@ from ghst.tools.modifier_trees import cmd_dump_tree
 from ghst.tools.blp import cmd_view_blp, cmd_convert_blp
 from ghst.tools.armadillo import cmd_add_armadillo_key
 
-app = typer.Typer(name="ghst", add_completion=False)
+app = typer.Typer(name="ghst", add_completion=False, no_args_is_help=True)
 
 
 # TREE COMMANDS

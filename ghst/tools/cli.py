@@ -13,7 +13,12 @@ app = typer.Typer(name="ghst", add_completion=False)
 # TREE COMMANDS
 
 tree_app = typer.Typer()
-app.add_typer(tree_app, name="tree", help="Commands related to ModifierTrees")
+app.add_typer(
+    tree_app,
+    name="tree",
+    help="Commands related to ModifierTrees",
+    no_args_is_help=True,
+)
 
 
 @tree_app.command(
@@ -26,7 +31,9 @@ def dump_tree(tree_id: int):
 # BLP COMMANDS
 
 blp_app = typer.Typer()
-app.add_typer(blp_app, name="blp", help="BLP file related commands")
+app.add_typer(
+    blp_app, name="blp", help="BLP file related commands", no_args_is_help=True
+)
 
 
 @blp_app.command(name="view", help="Opens the specified BLP file in a new UI window")
@@ -49,6 +56,7 @@ app.add_typer(
     armadillo_app,
     name="armadillo",
     help="Armadillo related commands",
+    no_args_is_help=True,
 )
 
 

@@ -6,6 +6,7 @@ from typing import Optional
 from ghst.tools.modifier_trees import cmd_dump_tree
 from ghst.tools.blp import cmd_view_blp, cmd_convert_blp
 from ghst.tools.armadillo import cmd_add_armadillo_key
+from ghst.tools.dbc import cmd_fetch_db2s
 
 app = typer.Typer(name="ghst", add_completion=False, no_args_is_help=True)
 
@@ -67,6 +68,20 @@ app.add_typer(
 )
 def add_armadillo_key():
     cmd_add_armadillo_key()
+
+
+# DB2 COMMANDS
+
+db2_app = typer.Typer()
+app.add_typer(db2_app, name="db2", help="DB2 commands", no_args_is_help=True)
+
+
+@db2_app.command(
+    name="fetch",
+    help="Fetches and saves all DB2s for the specified build to the specified output path",
+)
+def fetch_db2s(build: str, output_path: Path):
+    cmd_fetch_db2s(build, output_path)
 
 
 def handle_cli():

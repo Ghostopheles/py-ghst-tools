@@ -11,7 +11,7 @@ pip install git+https://github.com/Ghostopheles/py-ghst-tools.git
 You can view all of the different modules with `ghst --help`.
 
 ### Modifier Trees
-- `ghst tree view <ModifierTreeID>`: Dumps a ModifierTree to the console in a (hopefully) readable format
+- `ghst tree dump <ModifierTreeID>`: Dumps a ModifierTree to the console in a (hopefully) readable format
 
 ### BLP Tools
 - `ghst blp view <file_path>`: Opens the specified BLP file in a custom BLP viewer

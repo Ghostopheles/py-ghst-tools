@@ -7,6 +7,7 @@ from ghst.tools.modifier_trees import cmd_dump_tree
 from ghst.tools.blp import cmd_view_blp, cmd_convert_blp
 from ghst.tools.armadillo import cmd_add_armadillo_key
 from ghst.tools.dbc import cmd_fetch_db2s
+from ghst.tools.servers import cmd_get_all_realm_statuses, cmd_get_realm_status
 
 app = typer.Typer(name="ghst", add_completion=False, no_args_is_help=True)
 
@@ -82,6 +83,23 @@ app.add_typer(db2_app, name="db2", help="DB2 commands", no_args_is_help=True)
 )
 def fetch_db2s(build: str, output_path: Path):
     cmd_fetch_db2s(build, output_path)
+
+
+# REALM COMMANDS
+
+realm_app = typer.Typer()
+app.add_typer(realm_app, name="realms", help="Realm commands", no_args_is_help=True)
+
+
+@realm_app.command(
+    name="status",
+    help="Fetches the status of the given realm, or all realms if no realm slug is provided",
+)
+def get_realm_status(slug: Optional[str] = None):
+    if slug is not None:
+        cmd_get_realm_status(slug)
+    else:
+        cmd_get_all_realm_statuses()
 
 
 def handle_cli():

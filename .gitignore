@@ -13,3 +13,5 @@ dist/
 include/
 lib/
 *.cpp
+test/
+test.*

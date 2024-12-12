@@ -3,7 +3,6 @@ import httpx
 import concurrent.futures
 
 from pathlib import Path
-from typing import Optional
 
 from ghst.tools.shared import console
 

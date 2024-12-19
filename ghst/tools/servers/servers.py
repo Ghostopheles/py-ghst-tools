@@ -69,7 +69,7 @@ def cmd_get_all_realm_statuses():
     realm_statuses = __get_status_for_all_realms()
     table = Table(show_header=True, header_style="bold blue")
     table.add_column("Name", min_width=12)
-    table.add_column("Status", width=6)
+    table.add_column("Status", min_width=8)
     for realm in realm_statuses:
         name = f"[white]{realm.Name}[/white]"
         status_text = __get_status_text(realm.Online)
@@ -84,7 +84,7 @@ def cmd_get_realm_status(realmSlug: str):
     realm_status = __get_realm_status(realmSlug)
     table = Table(show_header=True, header_style="bold blue")
     table.add_column("Name", min_width=12)
-    table.add_column("Status", width=6)
+    table.add_column("Status", min_width=8)
     if realm_status is not None:
         name = f"[white]{realm_status.Name}[/white]"
         status_text = __get_status_text(realm_status.Online)

@@ -26,8 +26,8 @@ app.add_typer(
 @tree_app.command(
     name="dump", help="Dump a ModifierTree and it's ancestry to the console"
 )
-def dump_tree(tree_id: int):
-    cmd_dump_tree(tree_id)
+def dump_tree(tree_id: int, csv_path: Optional[Path] = None):
+    cmd_dump_tree(tree_id, csv_path)
 
 
 # BLP COMMANDS

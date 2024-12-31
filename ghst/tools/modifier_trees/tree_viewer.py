@@ -2,6 +2,7 @@ import re
 import csv
 import httpx
 
+from pathlib import Path
 from rich.tree import Tree
 from typing import Optional
 from dataclasses import dataclass
@@ -90,12 +91,16 @@ class TreeNode:
         self.children.append(child)
 
 
-def fetch_modifier_tree_csv() -> str:
-    console.print("Fetching ModifierTree DB2 as csv...")
-
-    res = http.get("https://wago.tools/db2/ModifierTree/csv")
-    res.raise_for_status()
-    data = res.text
+def fetch_modifier_tree_csv(db2csv_path: Optional[Path] = None) -> str:
+    if db2csv_path is not None and db2csv_path.exists():
+        console.print("Reading ModifierTree DB2 from file...")
+        with open(db2csv_path, "r") as f:
+            data = f.read()
+    else:
+        console.print("Fetching ModifierTree DB2 as csv...")
+        res = http.get("https://wago.tools/db2/ModifierTree/csv")
+        res.raise_for_status()
+        data = res.text
 
     console.print("Done!")
 
@@ -150,8 +155,8 @@ def get_root_node(node) -> TreeNode:
     return current_node
 
 
-def cmd_dump_tree(tree_id: int):
-    data = fetch_modifier_tree_csv()
+def cmd_dump_tree(tree_id: int, db2csv_path: Optional[Path] = None):
+    data = fetch_modifier_tree_csv(db2csv_path)
     tree_db = build_tree_db(data)
 
     if tree_id not in tree_db:

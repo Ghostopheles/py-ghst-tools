@@ -8,6 +8,7 @@ from ghst.tools.blp import cmd_view_blp, cmd_convert_blp
 from ghst.tools.armadillo import cmd_add_armadillo_key
 from ghst.tools.dbc import cmd_fetch_db2s
 from ghst.tools.servers import cmd_get_all_realm_statuses, cmd_get_realm_status
+from ghst.tools.curves import cmd_view_curve
 
 app = typer.Typer(name="ghst", add_completion=False, no_args_is_help=True)
 
@@ -100,6 +101,32 @@ def get_realm_status(slug: Optional[str] = None):
         cmd_get_realm_status(slug)
     else:
         cmd_get_all_realm_statuses()
+
+
+# CURVE COMMANDS
+
+curve_app = typer.Typer()
+app.add_typer(curve_app, name="curves", help="Curve commands", no_args_is_help=True)
+
+
+@curve_app.command(
+    name="view",
+    help="Renders the curve with the given ID as a graph",
+)
+def view_curve(
+    curveid: int,
+    title: Optional[str] = None,
+    export_path: Optional[Path] = None,
+    no_show: Optional[bool] = False,
+    build: Optional[str] = None,
+):
+    cmd_view_curve(
+        curveID=curveid,
+        title_override=title,
+        export_path=export_path,
+        no_show=no_show,
+        build=build,
+    )
 
 
 def handle_cli():

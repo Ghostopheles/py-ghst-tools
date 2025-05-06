@@ -1,4 +1,7 @@
 typer
+numpy
 pillow
+matplotlib
+mplcyberpunk
 httpx[http2]
 customtkinter

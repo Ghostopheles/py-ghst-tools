@@ -21,7 +21,10 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 requires-python = ">= 3.11"
-dependencies = ["httpx[http2]", "typer", "pillow", "customtkinter"]
+dependencies = ["httpx[http2]", "typer", "pillow", "customtkinter", "numpy", "matplotlib"]
+
+[project.optional-dependencies]
+cyberpunk = ["mplcyberpunk"]
 
 [project.scripts]
 ghst = "ghst:handle_cli"

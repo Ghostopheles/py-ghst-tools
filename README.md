@@ -23,3 +23,6 @@ You can view all of the different modules with `ghst --help`.
 
 ### DB2s
 - `ghst db2 fetch <build> <output_path>`: Downloads all DB2s for the `<build>` from wago.tools and saves them to `<output_path>`
+
+### Curves
+- `ghst curves view <curveID> [--title <title> --export-path <path> --build <build> --no-show]`: Plots and shows a graph representing the specified curve.

@@ -1,5 +1,5 @@
 # py-ghst-tools
-So, you've found my collection of cadaverous command-line datamining tools, huh? Well, good for you.
+So, you've found my collection of cadaverous command-line datamining tools, huh? Well, good for you, and good luck.
 
 ## Install
 

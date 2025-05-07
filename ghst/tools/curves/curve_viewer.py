@@ -13,12 +13,6 @@ from ghst.tools.shared import console
 WAGO_CSV_URL = "https://wago.tools/db2/{db2name}/csv"
 BUILD_FORMAT = "?build={build}"
 
-LINE_WIDTH = 0.5
-FIGURE_SIZE = (8, 5)
-POINT_MARKER_SIZE = 1.5
-GRADIENT_GLOW_ALPHA = 0.25
-GRADIENT_START = "min"
-
 USE_CYBERPUNK = False
 try:
     import mplcyberpunk
@@ -31,6 +25,27 @@ except ImportError:
 mpl.rcParams["font.size"] = 10
 mpl.rcParams["figure.titlesize"] = 20
 mpl.rcParams["figure.dpi"] = 150
+mpl.rcParams["figure.figsize"] = (5, 5)
+mpl.rcParams["lines.linewidth"] = 1
+mpl.rcParams["lines.marker"] = "o"
+mpl.rcParams["lines.markersize"] = 4
+mpl.rcParams["toolbar"] = "none"
+
+LAYOUT_TYPE = "tight"
+GRADIENT_GLOW_ALPHA = 0.25
+GRADIENT_START = "min"
+ANNOTATION_FONTSIZE = 7
+ANNOTATION_SNAP_THRESHOLD = 1.0
+ANNOTATION_BBOX = dict(
+    boxstyle="round,pad=0.4",
+    facecolor=mpl.rcParams["figure.facecolor"],
+    edgecolor="#08F7FE",
+    lw=1,
+    alpha=0.8,
+)
+ANNOTATION_ARROWPROPS = dict(arrowstyle="->", color="#FE53BB")
+ANNOTATION_OFFSET_MARGIN = 25
+ANNOTATION_OFFSET_AMOUNT = 10
 
 
 @dataclass
@@ -120,23 +135,22 @@ def cmd_view_curve(
         return None
 
     # plotting and scheming
-    fig, ax = plt.subplots(layout="constrained", figsize=FIGURE_SIZE)
-    points = [(point.Pos_0, point.Pos_1) for point in curve.Points]
-    x, y = zip(*points)
+    fig, ax = plt.subplots(layout=LAYOUT_TYPE)
+    index_to_id = {}
+    points = []
+    for i, point in enumerate(curve.Points):
+        index_to_id[i] = point.ID
+        points.append((point.Pos_0, point.Pos_1))
 
-    x_new = np.linspace(min(x), max(x), 100)
-    y_new = np.interp(x_new, x, y)
+    x_old, y_old = zip(*points)
 
-    ax.plot(
-        x_new,
-        y_new,
-        "-",
-        linewidth=LINE_WIDTH,
-        marker="o",
-        markersize=POINT_MARKER_SIZE,
-    )
+    x = np.linspace(min(x_old), max(x_old), len(points))
+    y = np.interp(x, x_old, y_old)
 
-    title = title_override if title_override is not None else f"Curve {curveID}"
+    ax.plot(x, y, "-", marker="o")
+
+    title = title_override if title_override is not None else "Unknown"
+    title += f" (id={curveID})"
     ax.set_title(title)
 
     if USE_CYBERPUNK:
@@ -154,4 +168,76 @@ def cmd_view_curve(
         )
 
     if not no_show:
+
+        ax.set_autoscale_on(False)
+
+        def find_nearest_point(x_mouse, y_mouse):
+            distances = np.hypot(x - x_mouse, y - y_mouse)
+            index = np.argmin(distances)
+            return index, distances[index]
+
+        def calculate_xy_tooltip_offset(x_pos, y_pos):
+            xlim = ax.get_xlim()
+            ylim = ax.get_ylim()
+
+            margin = ANNOTATION_OFFSET_MARGIN
+            offset_amount = ANNOTATION_OFFSET_AMOUNT
+            offset_x, offset_y = 15, 15
+
+            if x_pos + margin > xlim[1]:
+                offset_x = -(
+                    margin + offset_amount
+                )  # move left if too close to the right
+            elif x_pos - margin < xlim[0]:
+                offset_x = margin + offset_amount  # move right if too close to the left
+
+            if y_pos + margin > ylim[1]:
+                offset_y = -(
+                    margin + offset_amount
+                )  # move down if too close to the top
+            elif y_pos - margin < ylim[0]:
+                offset_y = margin + offset_amount  # move up if too close to the bottom
+
+            return offset_x, offset_y
+
+        hover_annotation = ax.annotate(
+            "",
+            xy=(0, 0),
+            xytext=(15, 15),
+            textcoords="offset points",
+            bbox=ANNOTATION_BBOX,
+            arrowprops=ANNOTATION_ARROWPROPS,
+            annotation_clip=False,
+            fontsize=ANNOTATION_FONTSIZE,
+        )
+        hover_annotation.set_visible(False)
+
+        def on_mouse_move(event):
+            if event.inaxes != ax:
+                hover_annotation.set_visible(False)
+                fig.canvas.draw_idle()
+                return
+
+            x_mouse, y_mouse = event.xdata, event.ydata
+            index, distance = find_nearest_point(x_mouse, y_mouse)
+
+            if distance < ANNOTATION_SNAP_THRESHOLD:
+                x_point = x[index]
+                y_point = y[index]
+                hover_annotation.xy = (x_point, y_point)
+                hover_annotation.set_text(
+                    f"ID: {index_to_id[index]}\nX: {x_point:.2f}\nY: {y_point:.2f}"
+                )
+
+                x_offset, y_offset = calculate_xy_tooltip_offset(x_point, y_point)
+                hover_annotation.set_position((x_offset, y_offset))
+                hover_annotation.set_visible(True)
+            else:
+                hover_annotation.set_visible(False)
+
+            fig.canvas.draw_idle()
+
+        fig.canvas.mpl_connect("motion_notify_event", on_mouse_move)
+        fig.canvas.manager.set_window_title(f"Curve: {title}")
+
         plt.show()

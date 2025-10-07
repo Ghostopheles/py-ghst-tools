@@ -6,7 +6,7 @@ from rich.table import Table
 
 from ghst.tools.shared import console
 
-GRAPHQL_URL = "https://worldofwarcraft.blizzard.com/graphql/"
+GRAPHQL_URL = "https://worldofwarcraft.blizzard.com/en-us/graphql/"
 
 headers = httpx.Headers({"Content-Type": "application/json"})
 client = httpx.Client(headers=headers)

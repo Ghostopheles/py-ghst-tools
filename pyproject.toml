@@ -21,7 +21,15 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 requires-python = ">= 3.11"
-dependencies = ["httpx[http2]", "typer", "pillow", "customtkinter", "numpy", "matplotlib", "mplcyberpunk"]
+dependencies = [
+    "httpx[http2]",
+    "typer",
+    "pillow",
+    "customtkinter",
+    "numpy",
+    "matplotlib",
+    "mplcyberpunk",
+]
 
 [project.scripts]
 ghst = "ghst:handle_cli"
@@ -32,5 +40,9 @@ Repository = "https://github.com/Ghostopheles/py-ghst-tools.git"
 Issues = "https://github.com/Ghostopheles/py-ghst-tools/issues"
 
 [build-system]
-requires = ["setuptools", "wheel", "cibuildwheel"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.9.21"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "ghst"
+module-root = ""
